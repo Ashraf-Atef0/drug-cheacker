@@ -1,43 +1,74 @@
-// fetch("./test.json")
-//   .then((response) => response.json())
-//   .then((dataBase) => {
-//     console.log(JSON.parse(dataBase));
-//   });
-
 import myJson from "./dataJSON.json" assert { type: "json" };
-// for (let i = 1; i <= 19772; i++) {
-//   if (myJson[i][0].toLowerCase().startsWith("augme")) {
-//     console.log(myJson[i]);
-//   }
-// }
 
 let inputFeld = document.getElementById("drug-name-search");
 let searchBtn = document.getElementById("search");
 let interactionBtn = document.getElementById("interaction-checker");
-let drugsContainer = document.querySelector(".drug-list");
+let drugsContainer = document.getElementById("drug-list");
+let dInterCont = document.querySelector(".interaction-list-container");
+let interComCont = document.getElementById("interaction-comment-container");
 let searchCount = 0;
+let searchByApi = false;
 let getInteraction = true;
 let interactionList = [];
+let interactionNamesList = [];
 let interactionComments = [];
+let currentInteractionCount = 0;
 
 searchBtn.addEventListener("click", () => {
   if (searchCount > 0) {
     drugsContainer.firstElementChild.remove();
   }
-  getDataBase(inputFeld.value.toLowerCase(), 1);
+  if (searchByApi) {
+    getDataBase(inputFeld.value.toLowerCase(), 1);
+  } else {
+    getDataBase(inputFeld.value.toLowerCase(), 0);
+  }
   searchCount++;
 });
 
 // This function getting HTML file that has all avalible drugs that matching input text
 function getDataBase(drugName, reqNum) {
-  if (reqNum == 1) {
+  if (reqNum == 0) {
     let drugLists = [];
     for (let i = 1; i <= 19772; i++) {
       if (myJson[i][0].toLowerCase().startsWith(drugName)) {
+        drugLists.push(myJson[i]);
+      }
+    }
+    generateDrugCards(drugLists);
+  } else if (reqNum == 1) {
+    let drugLists = [];
+    for (let i = 1; i <= 19772; i++) {
+      if (
+        myJson[i][0].toLowerCase().startsWith(drugName) ||
+        myJson[i][1].toLowerCase().indexOf(drugName) != -1
+      ) {
         console.log(myJson[i]);
         drugLists.push(myJson[i]);
       }
     }
+    generateDrugCards(drugLists);
+  } else if (reqNum == 2) {
+    let drugLists = [];
+    for (let i = 1; i <= 19772; i++) {
+      if (myJson[i][1].toLowerCase().indexOf(drugName) != -1) {
+        console.log(myJson[i]);
+        drugLists.push(myJson[i]);
+        console.log("from generate 2");
+      }
+    }
+    console.log("from generate 2");
+    generateDrugCards(drugLists);
+  } else if (reqNum == 3) {
+    let drugLists = [];
+    for (let i = 1; i <= 19772; i++) {
+      if (myJson[i][7].toLowerCase().indexOf(drugName) != -1) {
+        console.log(drugName);
+        console.log(myJson[i]);
+        drugLists.push(myJson[i]);
+      }
+    }
+    console.log("from generate 3");
     generateDrugCards(drugLists);
   }
 }
@@ -47,7 +78,7 @@ function generateDrugCards(drugLists) {
   allDrugCards.className = "all-drug-cards";
   drugLists.map((drugItems) => {
     let drugCard = document.createElement("div"),
-      drugName = document.createElement("h3"),
+      drugName = document.createElement("h4"),
       drugPrice = document.createElement("span"),
       drugApi = document.createElement("p"),
       drugMoreText = document.createElement("p"),
@@ -56,12 +87,14 @@ function generateDrugCards(drugLists) {
       drugRoute = document.createElement("p"),
       drugAlt = document.createElement("button"),
       drugSim = document.createElement("button"),
+      drugInteractionCircle = document.createElement("button"),
       drugMoreBtn = document.createElement("button");
     drugName.innerText = drugItems[0];
     drugName.className = "drug-name-eg";
     drugApi.innerText = drugItems[1];
     drugApi.className = "drug-api-eg";
     drugPrice.innerText = drugItems[3];
+    getDrugPrice(drugItems[0], drugItems[3], drugPrice);
     drugPrice.className = "drug-price-eg";
     drugCompany.innerText = drugItems[6];
     drugCompany.className = "drug-company-eg";
@@ -77,170 +110,86 @@ function generateDrugCards(drugLists) {
     drugSim.className = "drug-Sim-eg";
     drugMoreBtn.innerText = "More Information";
     drugMoreBtn.className = "drug-more-btn-eg";
-    drugCard.setAttribute("drug-code", drugItems[5]);
+    drugInteractionCircle.className = "drug-interaction-circle";
+    drugInteractionCircle.setAttribute("drug-name", drugItems[0]);
+    drugInteractionCircle.setAttribute("api-name", drugItems[1]);
     drugCard.className = "drug-card-eg";
+    drugCard.setAttribute("drug-name", drugItems[0]);
+    drugCard.setAttribute("api-name", drugItems[1]);
+    drugCard.setAttribute("action-name", drugItems[7]);
     drugCard.append(
       drugName,
       drugApi,
       drugAction,
       drugCompany,
       drugPrice,
-      drugMoreText,
-      drugMoreText,
       drugAlt,
       drugSim,
-      drugMoreBtn
+      drugMoreText,
+      drugMoreBtn,
+      drugInteractionCircle
     );
     allDrugCards.append(drugCard);
   });
   drugsContainer.appendChild(allDrugCards);
 }
-
+function getDrugPrice(drugName, drugOldPrice, drugPriceHolder) {
+  let moreRequest = new XMLHttpRequest();
+  moreRequest.onreadystatechange = () => {
+    if (moreRequest.readyState == 4) {
+      let htmlText = moreRequest.responseText;
+      let drugprice = htmlText.match(/>(\d+||\d+.\d+)<\/td>/);
+      drugPriceHolder.innerText = drugprice
+        ? drugprice[0].slice(1, -5)
+        : drugOldPrice;
+    }
+  };
+  moreRequest.open(
+    "get",
+    "http://www.drugeye.pharorg.com/drugeyeapp/android-search/drugeye-android-live-more.aspx?gname=" +
+      drugName,
+    true
+  );
+  moreRequest.send();
+}
 document.addEventListener("click", (e) => {
   if (e.target.className == "drug-Alt-eg") {
-    let drugCode = e.target.parentElement.getAttribute("drug-code");
+    let drugName = e.target.parentElement
+      .getAttribute("action-name")
+      .toLowerCase();
+    console.log(drugName);
     drugsContainer.firstElementChild.remove();
-    getDataBase(drugCode, 2);
+    getDataBase(drugName, 3);
   } else if (e.target.className == "drug-Sim-eg") {
-    let drugCode = e.target.parentElement.getAttribute("drug-code");
+    let drugName = e.target.parentElement
+      .getAttribute("api-name")
+      .toLowerCase();
+    console.log(drugName);
     drugsContainer.firstElementChild.remove();
-    getDataBase(drugCode, 3);
-  } else if (e.target.className == "drug-more-eg") {
-    let moreRequest = new XMLHttpRequest();
-    moreRequest.onreadystatechange = () => {
-      if (moreRequest.readyState == 4) {
-        console.log(moreRequest.responseText);
-        let htmlText = moreRequest.responseText,
-          sliceStart = htmlText.lastIndexOf("<td"),
-          sliceEnd = htmlText.lastIndexOf("</td>");
-        let preTreatedText = htmlText.slice(sliceStart, sliceEnd);
-        let treatedText = preTreatedText.slice(preTreatedText.indexOf(">") + 1);
-        e.target.classList.add("active-pop");
-        let moreInformation = document.createElement("p");
-        moreInformation.className = "pop-info";
-        moreInformation.innerHTML = treatedText;
-        e.target.parentElement.append(moreInformation);
-      }
-    };
-    moreRequest.open(
-      "get",
-      "http://www.drugeye.pharorg.com/drugeyeapp/android-search/drugeye-android-live-more.aspx?gname=" +
-        e.target.parentElement.firstElementChild.innerText,
-      true
-    );
-    moreRequest.send();
-  } else if (e.target.classList.contains("drug-card-eg") && getInteraction) {
-    console.log("clicked");
-    let apiName = e.target.children.item(1).innerText;
-    getApiNumber(apiName, 1);
-    // if (firstCheck) {
-    //   let rxCode = firstCheck[0];
-    //   interactionList.push(rxCode);
-    //   console.log(rxCode);
-    // } else if (apiName.indexOf("+") != -1) {
-    //   apiName.split("+").map((eachName) => {
-    //     let mulitCheck = getApiNumber(eachName);
-    //     if (mulitCheck) {
-    //       let rxCode = mulitCheck[0];
-    //       interactionList.push(rxCode);
-    //       console.log(rxCode);
-    //     } else {
-    //       console.log("sorry there is no data about" + eachName);
-    //     }
-    //   });
-    // }
-    ///////////////////////////////////////////////////////////////////
-    // if (e.target.classList.contains("selected")) {
-    //   e.target.classList.remove("selected");
-    // } else {
-    //   let apiName = e.target.children.item(1).innerText;
-    //   console.log(apiName);
-    //   let codeRequest = new XMLHttpRequest();
-    //   codeRequest.onreadystatechange = () => {
-    //     if (codeRequest.readyState == 4) {
-    //       let responseObject = JSON.parse(codeRequest.response);
-
-    //       if (!responseObject.idGroup.rxnormId) {
-    //         let rxCode = responseObject.idGroup.rxnormId[0];
-    //       } else {
-    //         let rxCode = null;
-    //       }
-    //       if (interactionList.indexOf(rxCode) == -1 && rxCode) {
-    //         interactionList.push(rxCode);
-    //         console.log(interactionList);
-    //       } else {
-    //         if (apiName.indexOf("+") == -1) {
-    //           let apiNewName = apiName.split(" ")[0];
-    //           let newCodeRequest = new XMLHttpRequest();
-    //           newCodeRequest.onreadystatechange = () => {
-    //             if (codeRequest.readyState == 4) {
-    //               let responseObject = JSON.parse(codeRequest.response);
-    //               if (!responseObject.idGroup.rxnormId) {
-    //                 let rxCode = responseObject.idGroup.rxnormId[0];
-    //               } else {
-    //                 let rxCode = null;
-    //               }
-    //               if (interactionList.indexOf(rxCode) == -1 && rxCode) {
-    //                 interactionList.push(rxCode);
-    //                 console.log(interactionList);
-    //               } else {
-    //                 // need to edit it;
-    //                 console.log("Sorry there is no data about this drug");
-    //               }
-    //             }
-    //           };
-    //           codeRequest.open(
-    //             "get",
-    //             `https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${apiNewName}&search=1`,
-    //             true
-    //           );
-    //           codeRequest.send();
-    //         } else {
-    //           //
-    //           let apiNewNameList = apiName.split("+");
-    //           apiNewNameList.map((apiNewName) => {
-    //             let newCodeRequest = new XMLHttpRequest();
-    //             newCodeRequest.onreadystatechange = () => {
-    //               if (codeRequest.readyState == 4) {
-    //                 let responseObject = JSON.parse(codeRequest.response);
-    //                 if (!responseObject.idGroup.rxnormId) {
-    //                   let rxCode = responseObject.idGroup.rxnormId[0];
-    //                 } else {
-    //                   let rxCode = null;
-    //                 }
-    //                 if (interactionList.indexOf(rxCode) == -1 && rxCode) {
-    //                   interactionList.push(rxCode);
-    //                   console.log(interactionList);
-    //                 } else {
-    //                   // need to edit it;
-    //                   console.log("Sorry there is no data about this drug");
-    //                 }
-    //               }
-    //             };
-    //             codeRequest.open(
-    //               "get",
-    //               `https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${apiNewName}&search=1`,
-    //               true
-    //             );
-    //             codeRequest.send();
-    //           });
-    //         }
-    //       }
-    //       console.log(rxCode);
-    //     }
-    //   };
-    //   codeRequest.open(
-    //     "get",
-    //     `https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${apiName}&search=1`,
-    //     true
-    //   );
-    //   codeRequest.send();
-    //   e.target.classList.add("selected");
-    // }
+    getDataBase(drugName, 2);
+  } else if (e.target.classList.contains("drug-more-btn-eg")) {
+    e.target.parentElement.classList.toggle("more");
+    e.target.innerText = e.target.parentElement.classList.contains("more")
+      ? "Show Less"
+      : "More Information";
+  } else if (
+    e.target.classList.contains("drug-interaction-circle") &&
+    getInteraction
+  ) {
+    if (e.target.classList.contains("active")) {
+      console.log("clicked active");
+      removeInteraction(e.target.getAttribute("drug-name"));
+      console.log(interactionNamesList);
+    } else {
+      console.log("clicked unactive");
+      let apiName = e.target.getAttribute("api-name");
+      getApiNumber(apiName, 1, e.target.getAttribute("drug-name"));
+    }
+    e.target.classList.toggle("active");
   }
 });
 
-async function getApiNumber(drugName, state) {
+async function getApiNumber(drugName, state, productName) {
   if (state == 1) {
     console.log("hello1");
     let codeRequest = new XMLHttpRequest();
@@ -250,13 +199,25 @@ async function getApiNumber(drugName, state) {
         console.log(responseObject, "from await");
         let rxList = responseObject.idGroup.rxnormId;
         if (rxList) {
-          interactionList.push(rxList[0]);
-          console.log(rxList);
+          // interactionList.push(rxList[0]);
+          addDrugToInteractionList(rxList[0], productName, drugName);
+          console.log({ rx: rxList, name: drugName });
         } else {
           if (drugName.indexOf("+") == -1) {
-            getApiNumber(drugName.split(" ")[0], 2);
+            if (drugName.indexOf("(") == -1) {
+              getApiNumber(drugName.split(" ")[0], 2, productName);
+            } else {
+              getApiNumber(
+                drugName.slice(
+                  drugName.indexOf("(") + 1,
+                  drugName.indexOf(")")
+                ),
+                2,
+                productName
+              );
+            }
           } else {
-            getApiNumber(drugName.split("+"), 3);
+            getApiNumber(drugName.split("+"), 3, productName);
           }
         }
         // return responseObject.idGroup.rxnormId;
@@ -277,8 +238,9 @@ async function getApiNumber(drugName, state) {
         console.log(responseObject, "from await");
         let rxList = responseObject.idGroup.rxnormId;
         if (rxList) {
-          interactionList.push(rxList[0]);
-          console.log(rxList);
+          // interactionList.push(rxList[0]);
+          addDrugToInteractionList(rxList[0], productName, drugName);
+          console.log({ rx: rxList, name: drugName });
         } else {
           console.log("sorry no data state 2");
         }
@@ -301,10 +263,29 @@ async function getApiNumber(drugName, state) {
           console.log(responseObject, "from await");
           let rxList = responseObject.idGroup.rxnormId;
           if (rxList) {
-            interactionList.push(rxList[0]);
-            console.log(rxList);
+            // interactionList.push(rxList[0]);
+            addDrugToInteractionList(rxList[0], productName, drugNamePart);
+            console.log({ rx: rxList, name: drugNamePart });
           } else {
-            console.log("sorry no data state 3");
+            if (
+              drugNamePart.indexOf("(") != -1 ||
+              drugNamePart.indexOf(" ") != -1
+            ) {
+              if (drugNamePart.indexOf("(") == -1) {
+                getApiNumber(drugNamePart.split(" ")[0], 2, productName);
+              } else {
+                getApiNumber(
+                  drugNamePart.slice(
+                    drugNamePart.indexOf("(") + 1,
+                    drugNamePart.indexOf(")")
+                  ),
+                  2,
+                  productName
+                );
+              }
+            } else {
+              console.log("sorry no data state 3");
+            }
           }
           // return responseObject.idGroup.rxnormId;
         }
@@ -320,6 +301,11 @@ async function getApiNumber(drugName, state) {
 }
 
 interactionBtn.onclick = () => {
+  interactionNamesList.map((e) => {
+    if (interactionList.indexOf(e[0]) == -1) {
+      interactionList.push(e[0]);
+    }
+  });
   console.log(interactionList);
   if (interactionList.length > 1) {
     let interactionRequest = new XMLHttpRequest();
@@ -340,7 +326,19 @@ interactionBtn.onclick = () => {
           });
         }
         console.log(interactionComments);
-        // console.log(interactionGroups);
+        interComCont.firstElementChild.remove();
+        let intComt = document.createElement("p");
+        intComt.className = "interaction-comment";
+        interComCont.append(intComt);
+        if (interactionComments.length) {
+          intComt.innerText = interactionComments.join("\n");
+          interactionComments = [];
+          interactionList = [];
+          console.log(1);
+        } else {
+          intComt.innerText = "There Is No Known Interactions";
+          console.log(2);
+        }
       }
     };
     interactionRequest.open(
@@ -351,5 +349,32 @@ interactionBtn.onclick = () => {
       true
     );
     interactionRequest.send();
+  } else {
+    interComCont.firstElementChild.remove();
+    let intComt = document.createElement("p");
+    intComt.className = "interaction-comment";
+    intComt.innerText =
+      "Please choose at least 2 drug or more to check interaction";
+    interComCont.append(intComt);
+    //////////////////////////////////
   }
 };
+function addDrugToInteractionList(rxNumber, drugName, apiName) {
+  interactionNamesList.push([rxNumber, drugName, apiName]);
+  olRefresh(interactionNamesList);
+}
+function removeInteraction(drugName) {
+  interactionNamesList = interactionNamesList.filter((e) => e[1] != drugName);
+  olRefresh(interactionNamesList);
+}
+function olRefresh(list) {
+  dInterCont.children.item(0).remove();
+  let newOl = document.createElement("ol");
+  newOl.className = "interaction-list";
+  list.map((e) => {
+    let li = document.createElement("li");
+    li.innerHTML = `<span>${e[2]}</span> From <span>${e[1]}</span>`;
+    newOl.append(li);
+  });
+  dInterCont.append(newOl);
+}

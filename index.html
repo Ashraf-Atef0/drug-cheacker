@@ -4,14 +4,57 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Drug Checker</title>
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Audiowide&family=Jaldi:wght@400;700&family=Racing+Sans+One&family=Sora:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <input type="text" id="drug-name-search" />
-    <button id="search">search</button>
-    <button id="interaction-checker">check</button>
-    <div class="drug-list"></div>
+    <header class="header"><h1>Drug checker</h1></header>
+    <div class="container">
+      <label id="drug-search-label" for="drug-name-search" hello="hi"
+        >Drug name:</label
+      >
+      <input type="text" id="drug-name-search" placeholder="Enter drug name" />
+      <div class="search-container">
+        <label id="api-search-label"
+          ><span>search by active ingredient name:</span
+          ><input type="checkbox" name="api-search" id="api-search" /><span
+            class="check-icon"
+          ></span
+        ></label>
+        <button id="search">search</button>
+      </div>
+      <label class="want-check-interaction-label"
+        ><span>Enable selecting drugs for cheack interaction:</span>
+        <input type="checkbox" id="want-check-interaction" /><span
+          class="check-icon"
+        ></span
+      ></label>
+      <div class="interaction-fields">
+        <h3 class="interaction-label">Interaction Drugs List:</h3>
+        <div class="interaction-list-container">
+          <ol class="interaction-list"></ol>
+        </div>
+        <h3 class="interaction-label">Interaction Comment:</h3>
+        <div id="interaction-comment-container">
+          <p class="interaction-comment"></p>
+        </div>
+        <button id="interaction-checker">Check Interaction</button>
+      </div>
+      <h3>Available Drugs:</h3>
+      <div class="drug-list" id="drug-list"></div>
+    </div>
+    <footer>
+      <span>Created by <a href="tel:+201093490902">Ashraf-Atef©</a></span>
+      <span>Supervised by DR-Ghada Ali Mahmoud</span>
+      <span>Sinai University-Arish</span>
+    </footer>
     <script src="main.js" type="module"></script>
-    <script></script>
+    <script src="style.js"></script>
   </body>
 </html>
