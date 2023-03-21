@@ -19,3 +19,4 @@ inputFeld.onkeyup = (e) => {
     searchBtn = document.getElementById("search").click();
   }
 };
+interactionCheck.click();

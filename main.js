@@ -7,8 +7,13 @@ let interactionBtn = document.getElementById("interaction-checker");
 let drugsContainer = document.getElementById("drug-list");
 let dInterCont = document.querySelector(".interaction-list-container");
 let interComCont = document.getElementById("interaction-comment-container");
+let apiCheckBox = document.getElementById("api-search");
 let searchCount = 0;
 let searchByApi = false;
+apiCheckBox.addEventListener("change", (e) => {
+  searchByApi = e.target.checked;
+});
+apiCheckBox.click();
 let getInteraction = true;
 let interactionList = [];
 let interactionNamesList = [];
