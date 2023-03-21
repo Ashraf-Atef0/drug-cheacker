@@ -309,7 +309,7 @@ interactionBtn.onclick = () => {
         intComt.className = "interaction-comment";
         interComCont.append(intComt);
         if (interactionComments.length) {
-          intComt.innerText = interactionComments.join("\n");
+          intComt.innerText = interactionComments.join("\n\n");
           interactionComments = [];
           interactionList = [];
         } else {
