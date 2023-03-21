@@ -285,6 +285,7 @@ body .container .drug-list .all-drug-cards .drug-card-eg {
   grid-template-columns: repeat(4, 1fr);
   padding: 20px;
   margin: 20px 0;
+  background-color: #fff;
   border: 1px solid #ededed;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
@@ -449,6 +450,9 @@ body .container .drug-list .all-drug-cards .drug-card-eg .drug-more-btn-eg {
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-more-btn-eg:hover {
   background-color: #0356fa;
   color: white;
+}
+body .container .drug-list .all-drug-cards .drug-card-eg.more {
+  margin: 50px 0;
 }
 body .container .drug-list .all-drug-cards .drug-card-eg.more .drug-more-text-eg {
   display: block;
