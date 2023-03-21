@@ -6,7 +6,7 @@
 }
 button {
   cursor: pointer;
-  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 body {
   padding-top: 80px;
