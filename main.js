@@ -50,7 +50,6 @@ function getDataBase(drugName, reqNum) {
         myJson[i][0].toLowerCase().startsWith(drugName) ||
         myJson[i][1].toLowerCase().indexOf(drugName) != -1
       ) {
-        console.log(myJson[i]);
         drugLists.push(myJson[i]);
       }
     }
@@ -59,23 +58,17 @@ function getDataBase(drugName, reqNum) {
     let drugLists = [];
     for (let i = 1; i <= 19772; i++) {
       if (myJson[i][1].toLowerCase().indexOf(drugName) != -1) {
-        console.log(myJson[i]);
         drugLists.push(myJson[i]);
-        console.log("from generate 2");
       }
     }
-    console.log("from generate 2");
     generateDrugCards(drugLists);
   } else if (reqNum == 3) {
     let drugLists = [];
     for (let i = 1; i <= 19772; i++) {
       if (myJson[i][7].toLowerCase().indexOf(drugName) != -1) {
-        console.log(drugName);
-        console.log(myJson[i]);
         drugLists.push(myJson[i]);
       }
     }
-    console.log("from generate 3");
     generateDrugCards(drugLists);
   }
 }
@@ -145,7 +138,6 @@ function getDrugPrice(drugName, drugOldPrice, drugPriceHolder) {
   for (let i = 0; i < priceJson["price"].length; i++) {
     if (priceJson["price"][i][0] == drugName) {
       newPrice = priceJson["price"][i][1];
-      console.log(newPrice);
       drugPriceHolder.innerText = newPrice;
       break;
     }
@@ -156,14 +148,14 @@ document.addEventListener("click", (e) => {
     let drugName = e.target.parentElement
       .getAttribute("action-name")
       .toLowerCase();
-    console.log(drugName);
+
     drugsContainer.firstElementChild.remove();
     getDataBase(drugName, 3);
   } else if (e.target.className == "drug-Sim-eg") {
     let drugName = e.target.parentElement
       .getAttribute("api-name")
       .toLowerCase();
-    console.log(drugName);
+
     drugsContainer.firstElementChild.remove();
     getDataBase(drugName, 2);
   } else if (e.target.classList.contains("drug-more-btn-eg")) {
@@ -176,11 +168,8 @@ document.addEventListener("click", (e) => {
     getInteraction
   ) {
     if (e.target.classList.contains("active")) {
-      console.log("clicked active");
       removeInteraction(e.target.getAttribute("drug-name"));
-      console.log(interactionNamesList);
     } else {
-      console.log("clicked unactive");
       let apiName = e.target.getAttribute("api-name");
       getApiNumber(apiName, 1, e.target.getAttribute("drug-name"));
     }
@@ -190,17 +179,15 @@ document.addEventListener("click", (e) => {
 
 async function getApiNumber(drugName, state, productName) {
   if (state == 1) {
-    console.log("hello1");
     let codeRequest = new XMLHttpRequest();
     codeRequest.onreadystatechange = async () => {
       if (codeRequest.readyState == 4) {
         let responseObject = await JSON.parse(codeRequest.response);
-        console.log(responseObject, "from await");
+
         let rxList = responseObject.idGroup.rxnormId;
         if (rxList) {
           // interactionList.push(rxList[0]);
           addDrugToInteractionList(rxList[0], productName, drugName);
-          console.log({ rx: rxList, name: drugName });
         } else {
           if (drugName.indexOf("+") == -1) {
             if (drugName.indexOf("(") == -1) {
@@ -229,17 +216,15 @@ async function getApiNumber(drugName, state, productName) {
     );
     codeRequest.send();
   } else if (state == 2) {
-    console.log("hello2");
     let codeRequest = new XMLHttpRequest();
     codeRequest.onreadystatechange = async () => {
       if (codeRequest.readyState == 4) {
         let responseObject = await JSON.parse(codeRequest.response);
-        console.log(responseObject, "from await");
+
         let rxList = responseObject.idGroup.rxnormId;
         if (rxList) {
           // interactionList.push(rxList[0]);
           addDrugToInteractionList(rxList[0], productName, drugName);
-          console.log({ rx: rxList, name: drugName });
         } else {
           console.log("sorry no data state 2");
         }
@@ -253,18 +238,16 @@ async function getApiNumber(drugName, state, productName) {
     );
     codeRequest.send();
   } else if (state == 3) {
-    console.log("hello3");
     drugName.map((drugNamePart) => {
       let codeRequest = new XMLHttpRequest();
       codeRequest.onreadystatechange = async () => {
         if (codeRequest.readyState == 4) {
           let responseObject = await JSON.parse(codeRequest.response);
-          console.log(responseObject, "from await");
+
           let rxList = responseObject.idGroup.rxnormId;
           if (rxList) {
             // interactionList.push(rxList[0]);
             addDrugToInteractionList(rxList[0], productName, drugNamePart);
-            console.log({ rx: rxList, name: drugNamePart });
           } else {
             if (
               drugNamePart.indexOf("(") != -1 ||
@@ -286,7 +269,6 @@ async function getApiNumber(drugName, state, productName) {
               console.log("sorry no data state 3");
             }
           }
-          // return responseObject.idGroup.rxnormId;
         }
       };
       codeRequest.open(
@@ -305,7 +287,6 @@ interactionBtn.onclick = () => {
       interactionList.push(e[0]);
     }
   });
-  console.log(interactionList);
   if (interactionList.length > 1) {
     let interactionRequest = new XMLHttpRequest();
     interactionRequest.onreadystatechange = () => {
@@ -319,12 +300,10 @@ interactionBtn.onclick = () => {
                 if (interactionComments.indexOf(interText.description) == -1) {
                   interactionComments.push(interText.description);
                 }
-                //   console.log(interText.description);
               });
             });
           });
         }
-        console.log(interactionComments);
         interComCont.firstElementChild.remove();
         let intComt = document.createElement("p");
         intComt.className = "interaction-comment";
@@ -333,10 +312,8 @@ interactionBtn.onclick = () => {
           intComt.innerText = interactionComments.join("\n");
           interactionComments = [];
           interactionList = [];
-          console.log(1);
         } else {
           intComt.innerText = "There Is No Known Interactions";
-          console.log(2);
         }
       }
     };
