@@ -307,6 +307,7 @@ body .container .drug-list .all-drug-cards .drug-card-eg .drug-company-eg {
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
+  padding-right: 5%;
 }
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-name-eg::before,
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-api-eg::before,
