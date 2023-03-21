@@ -6,10 +6,12 @@
 }
 button {
   cursor: pointer;
+  user-select: none;
 }
 body {
   padding-top: 80px;
   color: #000;
+  min-height: 100vh;
   min-height: 100dvh;
   position: relative;
   padding-bottom: 150px;
