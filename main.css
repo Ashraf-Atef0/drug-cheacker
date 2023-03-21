@@ -18,6 +18,7 @@ body {
   min-height: 100dvh;
   position: relative;
   padding-bottom: 150px;
+  transition-duration: 200ms;
 }
 
 .header {
@@ -294,6 +295,13 @@ body .container .drug-list .all-drug-cards .drug-card-eg {
 body .container .drug-list .all-drug-cards .drug-card-eg:hover {
   transform: scale(105%);
   box-shadow: 0px 4px 8px 2px rgba(0, 0, 0, 0.25);
+  margin: 30px 0;
+}
+body .container .drug-list .all-drug-cards .drug-card-eg:last-of-type {
+  margin-bottom: 30px;
+}
+body .container .drug-list .all-drug-cards .drug-card-eg:last-of-type:hover {
+  margin-bottom: 40px;
 }
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-name-eg,
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-api-eg,
