@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 1s;
 }
 
 button {
@@ -59,6 +60,7 @@ body .container #drug-name-search {
   font-size: 15px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   caret-color: #1d66f2;
+  transition: all 150ms;
 }
 body .container #drug-name-search::-moz-placeholder {
   font-family: "Sora";
@@ -164,22 +166,39 @@ body .container #search {
   align-items: center;
   position: relative;
   width: 91px;
-  height: 32px;
+  height: 40px;
   background: #4d10fb;
   border-radius: 5px;
   font-family: "Sora";
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   color: #ffffff;
   outline: none;
   border: none;
+  transition: all 300ms;
 }
 @media (max-width: 440px) {
   body .container #search {
-    width: 110;
+    width: 210px;
     margin: 10px 0 20px;
   }
+}
+@media (min-width: 630px) {
+  body .container #search {
+    width: 210px;
+    margin: 10px 0 20px;
+  }
+}
+body .container #search:hover {
+  background-color: #270092;
+}
+body .container #search::before {
+  content: "";
+  background: url("./images/search.svg") no-repeat center;
+  background-size: contain;
+  width: 25px;
+  height: 25px;
 }
 body .container .want-check-interaction-label {
   max-width: 420px;
@@ -188,6 +207,24 @@ body .container .interaction-fields {
   display: none;
 }
 body .container .interaction-fields.active {
+  display: block;
+}
+body .container .interaction-fields .how-to-choose {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 10px 0 20px;
+  color: #1d65f2;
+  cursor: pointer;
+}
+body .container .interaction-fields .how-to-choose p {
+  color: #000;
+  overflow: hidden;
+  max-height: 0px;
+}
+body .container .interaction-fields .how-to-choose:hover p {
+  max-height: 100px;
   display: block;
 }
 body .container .interaction-fields #interaction-checker {
@@ -207,6 +244,10 @@ body .container .interaction-fields #interaction-checker {
   outline: none;
   border: none;
   margin: 10px 0;
+  transition: all 300ms;
+}
+body .container .interaction-fields #interaction-checker:hover {
+  background-color: #270092;
 }
 body .container .interaction-fields .interaction-list {
   font-family: "Sora";
@@ -214,9 +255,14 @@ body .container .interaction-fields .interaction-list {
   font-weight: 600;
   font-size: 16px;
   margin: 10px 0;
+  list-style-position: inside;
 }
 body .container .interaction-fields .interaction-list li span {
   color: rgb(0, 106, 0);
+  font-weight: bold;
+}
+body .container .interaction-fields .interaction-list li span:first-of-type {
+  color: rgb(255, 0, 0);
   font-weight: bold;
 }
 body .container .interaction-fields .interaction-comment {
@@ -225,6 +271,7 @@ body .container .interaction-fields .interaction-comment {
   color: red;
 }
 body .container h3 {
+  margin: 10px 0;
   font-family: "Sora";
   font-style: normal;
   font-weight: 600;
@@ -237,8 +284,12 @@ body .container .drug-list .all-drug-cards .drug-card-eg {
   padding: 20px;
   margin: 20px 0;
   border: 1px solid #ededed;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
+}
+body .container .drug-list .all-drug-cards .drug-card-eg:hover {
+  transform: scale(105%);
+  box-shadow: 0px 4px 8px 2px rgba(0, 0, 0, 0.25);
 }
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-name-eg,
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-api-eg,
@@ -311,6 +362,7 @@ body .container .drug-list .all-drug-cards .drug-card-eg .drug-price-eg {
   font-weight: 400;
   font-size: 20px;
   line-height: 20px;
+  color: #1d65f2;
 }
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-price-eg::before {
   content: "Price:";
@@ -327,6 +379,7 @@ body .container .drug-list .all-drug-cards .drug-card-eg .drug-price-eg::after {
   font-family: "Jaldi";
   font-weight: 400;
   font-size: 10px;
+  color: #000;
 }
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-more-text-eg {
   grid-column: 1/5;
@@ -348,6 +401,7 @@ body .container .drug-list .all-drug-cards .drug-card-eg .drug-Sim-eg {
   margin-bottom: 10px;
   width: 200px;
   padding: 5px;
+  transition: all 300ms;
 }
 @media (max-width: 590px) {
   body .container .drug-list .all-drug-cards .drug-card-eg .drug-Alt-eg,
@@ -361,6 +415,10 @@ body .container .drug-list .all-drug-cards .drug-card-eg .drug-Sim-eg {
   body .container .drug-list .all-drug-cards .drug-card-eg .drug-Sim-eg {
     max-width: 180px;
   }
+}
+body .container .drug-list .all-drug-cards .drug-card-eg .drug-Alt-eg:hover,
+body .container .drug-list .all-drug-cards .drug-card-eg .drug-Sim-eg:hover {
+  background-color: #014be0;
 }
 body .container .drug-list .all-drug-cards .drug-card-eg .drug-more-btn-eg {
   grid-column: 4/5;
@@ -385,6 +443,10 @@ body .container .drug-list .all-drug-cards .drug-card-eg .drug-more-btn-eg {
   body .container .drug-list .all-drug-cards .drug-card-eg .drug-more-btn-eg {
     max-width: 180px;
   }
+}
+body .container .drug-list .all-drug-cards .drug-card-eg .drug-more-btn-eg:hover {
+  background-color: #0356fa;
+  color: white;
 }
 body .container .drug-list .all-drug-cards .drug-card-eg.more .drug-more-text-eg {
   display: block;

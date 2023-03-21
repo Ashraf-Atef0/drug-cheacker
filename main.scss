@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 1s;
 }
 button {
   cursor: pointer;
@@ -55,6 +56,7 @@ body .container {
     font-size: 15px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     caret-color: #1d66f2;
+    transition: all 150ms;
     &::placeholder {
       font-family: "Sora";
       font-style: normal;
@@ -140,19 +142,34 @@ body .container {
     align-items: center;
     position: relative;
     width: 91px;
-    height: 32px;
+    height: 40px;
     background: #4d10fb;
     border-radius: 5px;
     font-family: "Sora";
     font-style: normal;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 18px;
     color: #ffffff;
     outline: none;
     border: none;
+    transition: all 300ms;
     @media (max-width: 440px) {
-      width: 110;
+      width: 210px;
       margin: 10px 0 20px;
+    }
+    @media (min-width: 630px) {
+      width: 210px;
+      margin: 10px 0 20px;
+    }
+    &:hover {
+      background-color: #270092;
+    }
+    &::before {
+      content: "";
+      background: url("./images/search.svg") no-repeat center;
+      background-size: contain;
+      width: 25px;
+      height: 25px;
     }
   }
   .want-check-interaction-label {
@@ -163,6 +180,24 @@ body .container {
     //edit it please
     &.active {
       display: block;
+    }
+    .how-to-choose {
+      font-family: "Sora";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      margin: 10px 0 20px;
+      color: #1d65f2;
+      cursor: pointer;
+      p {
+        color: #000;
+        overflow: hidden;
+        max-height: 0px;
+      }
+      &:hover p {
+        max-height: 100px;
+        display: block;
+      }
     }
     #interaction-checker {
       display: inline-flex;
@@ -181,6 +216,10 @@ body .container {
       outline: none;
       border: none;
       margin: 10px 0;
+      transition: all 300ms;
+      &:hover {
+        background-color: #270092;
+      }
     }
     .interaction-list {
       font-family: "Sora";
@@ -188,8 +227,13 @@ body .container {
       font-weight: 600;
       font-size: 16px;
       margin: 10px 0;
+      list-style-position: inside;
       li span {
         color: rgb(0, 106, 0);
+        font-weight: bold;
+      }
+      li span:first-of-type {
+        color: rgb(255, 0, 0);
         font-weight: bold;
       }
     }
@@ -200,6 +244,7 @@ body .container {
     }
   }
   h3 {
+    margin: 10px 0;
     font-family: "Sora";
     font-style: normal;
     font-weight: 600;
@@ -213,8 +258,12 @@ body .container {
       padding: 20px;
       margin: 20px 0;
       border: 1px solid #ededed;
-      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 15px;
+      &:hover {
+        transform: scale(105%);
+        box-shadow: 0px 4px 8px 2px rgba(0, 0, 0, 0.25);
+      }
       .drug-name-eg,
       .drug-api-eg,
       .drug-action-eg,
@@ -272,6 +321,7 @@ body .container {
         font-weight: 400;
         font-size: 20px;
         line-height: 20px;
+        color: #1d65f2;
         &::before {
           content: "Price:";
           margin-bottom: 50px;
@@ -287,6 +337,7 @@ body .container {
           font-family: "Jaldi";
           font-weight: 400;
           font-size: 10px;
+          color: #000;
         }
       }
       .drug-more-text-eg {
@@ -309,12 +360,16 @@ body .container {
         margin-bottom: 10px;
         width: 200px;
         padding: 5px;
+        transition: all 300ms;
         @media (max-width: 590px) {
           grid-column: 1/5;
           margin: 10px auto;
         }
         @media (max-width: 300px) {
           max-width: 180px;
+        }
+        &:hover {
+          background-color: #014be0;
         }
       }
       .drug-more-btn-eg {
@@ -335,6 +390,11 @@ body .container {
         }
         @media (max-width: 300px) {
           max-width: 180px;
+        }
+
+        &:hover {
+          background-color: #0356fa;
+          color: white;
         }
       }
       &.more .drug-more-text-eg {

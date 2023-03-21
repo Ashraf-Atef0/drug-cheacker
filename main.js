@@ -1,4 +1,5 @@
 import myJson from "./dataJSON.json" assert { type: "json" };
+import priceJson from "./newPrice.json" assert { type: "json" };
 
 let inputFeld = document.getElementById("drug-name-search");
 let searchBtn = document.getElementById("search");
@@ -15,15 +16,21 @@ let interactionComments = [];
 let currentInteractionCount = 0;
 
 searchBtn.addEventListener("click", () => {
-  if (searchCount > 0) {
-    drugsContainer.firstElementChild.remove();
-  }
-  if (searchByApi) {
+  if (searchByApi && inputFeld.value.length) {
+    if (searchCount > 0) {
+      drugsContainer.firstElementChild.remove();
+    }
     getDataBase(inputFeld.value.toLowerCase(), 1);
-  } else {
+    searchCount++;
+  } else if (inputFeld.value.length) {
+    if (searchCount > 0) {
+      drugsContainer.firstElementChild.remove();
+    }
     getDataBase(inputFeld.value.toLowerCase(), 0);
+    searchCount++;
+  } else {
+    alert("Please enter name of drug!");
   }
-  searchCount++;
 });
 
 // This function getting HTML file that has all avalible drugs that matching input text
@@ -134,23 +141,15 @@ function generateDrugCards(drugLists) {
   drugsContainer.appendChild(allDrugCards);
 }
 function getDrugPrice(drugName, drugOldPrice, drugPriceHolder) {
-  let moreRequest = new XMLHttpRequest();
-  moreRequest.onreadystatechange = () => {
-    if (moreRequest.readyState == 4) {
-      let htmlText = moreRequest.responseText;
-      let drugprice = htmlText.match(/>(\d+||\d+.\d+)<\/td>/);
-      drugPriceHolder.innerText = drugprice
-        ? drugprice[0].slice(1, -5)
-        : drugOldPrice;
+  let newPrice = "No Price";
+  for (let i = 0; i < priceJson["price"].length; i++) {
+    if (priceJson["price"][i][0] == drugName) {
+      newPrice = priceJson["price"][i][1];
+      console.log(newPrice);
+      drugPriceHolder.innerText = newPrice;
+      break;
     }
-  };
-  moreRequest.open(
-    "get",
-    "http://www.drugeye.pharorg.com/drugeyeapp/android-search/drugeye-android-live-more.aspx?gname=" +
-      drugName,
-    true
-  );
-  moreRequest.send();
+  }
 }
 document.addEventListener("click", (e) => {
   if (e.target.className == "drug-Alt-eg") {
