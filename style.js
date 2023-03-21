@@ -11,3 +11,11 @@ interactionCheck.onchange = () => {
   interactionField.classList.toggle("active");
   interactionCheckIcon.classList.toggle("active");
 };
+
+let inputFeld = document.getElementById("drug-name-search");
+inputFeld.focus();
+inputFeld.onkeyup = (e) => {
+  if (e.keyCode == 13) {
+    searchBtn = document.getElementById("search").click();
+  }
+};
