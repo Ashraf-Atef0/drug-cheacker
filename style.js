@@ -16,7 +16,24 @@ let inputFeld = document.getElementById("drug-name-search");
 inputFeld.focus();
 inputFeld.onkeyup = (e) => {
   if (e.keyCode == 13) {
-    searchBtn = document.getElementById("search").click();
+     document.getElementById("search").click();
   }
 };
+inputFeld.onblur = ()=>{
+  if(inputFeld.value.trim().length > 2) {
+    document.getElementById("search").click();
+  }
+}
 interactionCheck.click();
+
+let scrollTopBtn = document.getElementById("scroll-top");
+scrollTopBtn.onclick = ()=>{
+  window.scrollTo({top:"0",behavior: "smooth"})
+}
+window.onscroll = ()=>{
+  if(window.scrollY > 800){
+    scrollTopBtn.classList.add('active')
+  }else {
+    scrollTopBtn.classList.remove('active')
+  }
+}

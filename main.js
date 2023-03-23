@@ -21,20 +21,21 @@ let interactionComments = [];
 let currentInteractionCount = 0;
 
 searchBtn.addEventListener("click", () => {
-  if (searchByApi && inputFeld.value.length) {
+  if (searchByApi && inputFeld.value.trim().length) {
     if (searchCount > 0) {
       drugsContainer.firstElementChild.remove();
     }
-    getDataBase(inputFeld.value.toLowerCase(), 1);
+    getDataBase(inputFeld.value.toLowerCase().trim(), 1);
     searchCount++;
-  } else if (inputFeld.value.length) {
+  } else if (inputFeld.value.trim().length) {
     if (searchCount > 0) {
       drugsContainer.firstElementChild.remove();
     }
-    getDataBase(inputFeld.value.toLowerCase(), 0);
+    getDataBase(inputFeld.value.toLowerCase().trim(), 0);
     searchCount++;
   } else {
     alert("Please enter name of drug!");
+    inputFeld.value = ""
   }
 });
 
